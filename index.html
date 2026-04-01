@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masked SMP | Home</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#39ff14">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2285%22 font-family=%22Arial Black, sans-serif%22 fill=%22%2339ff14%22>M</text></svg>">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Orbitron:wght@700;900&display=swap');
+        :root { --accent-green: #39ff14; --bg-dark: #060606; --glass: rgba(255, 255, 255, 0.03); --glass-border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-dark); color: white; overflow-x: hidden; min-height: 100vh; }
+        nav { position: fixed; width: 90%; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; backdrop-filter: blur(15px); background: rgba(10, 10, 10, 0.7); border: 1px solid var(--glass-border); padding: 1rem; display: flex; justify-content: center; gap: 25px; border-radius: 100px; }
+        nav a { color: #888; text-decoration: none; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
+        nav a.active { color: var(--accent-green); text-shadow: 0 0 10px var(--accent-green); }
+        .content-section { display: none; padding: 140px 20px; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.4s ease; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
+        .card { background: var(--glass); border: 1px solid var(--glass-border); padding: 30px; border-radius: 25px; text-align: center; transition: 0.3s; }
+        .role-badge { padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 900; border: 1px solid rgba(255,255,255,0.1); color: var(--accent-green); display: inline-block; margin-top: 10px; }
+        .app-download-btn { display: inline-flex; align-items: center; gap: 12px; margin-top: 40px; padding: 18px 35px; background: #fff; color: #000; font-weight: 900; text-decoration: none; border-radius: 50px; font-family: 'Orbitron'; font-size: 0.85rem; transition: 0.3s; cursor: pointer; border:none; }
+        .app-download-btn:hover { transform: translateY(-5px); background: var(--accent-green); box-shadow: 0 0 40px var(--accent-green); }
+        .timer-ui { display: inline-flex; gap: 15px; background: #000; padding: 20px; border-radius: 20px; border: 1px solid var(--accent-green); margin-top: 20px; }
+        .t-val { font-family: 'Orbitron'; font-size: 2rem; color: #fff; }
+        h1, h2, h3 { font-family: 'Orbitron'; text-align: center; }
+        .admin-box { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 20px; border: 1px solid #222; margin-bottom: 20px; }
+        .login-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; outline: none; }
+        .admin-btn { width: 100%; padding: 12px; background: var(--accent-green); color: #000; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a onclick="showPage('home')" id="home-nav" class="active">Home</a>
+        <a onclick="checkAdminGate()" id="control-nav">Control</a>
+        <a onclick="showPage('staff')">Council</a>
+        <a onclick="showPage('members')">Members</a>
+        <a onclick="showPage('gallery')">Vault</a>
+    </nav>
+
+    <div id="home" class="content-section active" style="text-align:center;">
+        <h1 style="font-size: 4rem; color: var(--accent-green);">MASKED SMP</h1>
+        
+        <div id="event-display" style="display:none; margin: 30px 0;">
+            <h2 id="ev-title" style="font-size:0.8rem; color:var(--accent-green); margin-bottom:10px;"></h2>
+            <div class="timer-ui">
+                <div style="text-align:center;"><span class="t-val" id="h-val">00</span></div>
+                <div style="text-align:center;"><span class="t-val" id="m-val">00</span></div>
+                <div style="text-align:center;"><span class="t-val" id="s-val">00</span></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <p style="color: #444; letter-spacing: 5px; font-weight: 800;">TOTAL PLAYERS</p>
+            <h2 id="total-count" style="font-size: 4rem;">0</h2>
+        </div>
+
+        <div style="margin-top: 50px;">
+            <button onclick="installApp()" class="app-download-btn" id="installBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                INSTALL AS APP
+            </button>
+            <p style="margin-top: 15px; font-size: 0.6rem; color: #555;">Works on Android & iOS Chrome/Safari</p>
+        </div>
+    </div>
+
+    <div id="login-page" class="content-section">
+        <div style="max-width:400px; margin:auto; background:var(--glass); padding:40px; border-radius:30px; border:1px solid var(--glass-border); text-align:center;">
+            <h2>ADMIN LOGIN</h2>
+            <input type="text" id="user-in" class="login-input" placeholder="Username">
+            <input type="password" id="pass-in" class="login-input" placeholder="Password">
+            <button class="admin-btn" onclick="tryLogin()">Login</button>
+            <p id="login-err" style="color:#ff4444; margin-top:10px; font-size:0.7rem;"></p>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="content-section">
+        <div style="display:flex; justify-content:space-between; margin-bottom:30px;">
+            <h2 id="who-is">DASHBOARD</h2>
+            <button onclick="logout()" style="color:#ff4444; background:none; border:1px solid #ff4444; padding:5px 15px; border-radius:10px; cursor:pointer;">Logout</button>
+        </div>
+        <div class="grid">
+            <div class="admin-box">
+                <h3>PLAYER MANAGEMENT</h3>
+                <div id="admin-manage-list"></div>
+            </div>
+            <div class="admin-box">
+                <h3>ADD PLAYER</h3>
+                <input type="text" id="p-name" class="login-input" placeholder="MC Name">
+                <input type="text" id="p-role" class="login-input" placeholder="Role">
+                <select id="p-type" class="login-input"><option value="staff">Council</option><option value="member">Citizen</option></select>
+                <button class="admin-btn" onclick="savePlayer()">Add</button>
+            </div>
+            <div class="admin-box">
+                <h3>EVENT TIMER</h3>
+                <input type="text" id="ev-name-in" class="login-input" placeholder="Event Name">
+                <input type="number" id="ev-h" class="login-input" placeholder="Hours">
+                <button class="admin-btn" onclick="setEvent()">Start</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="staff" class="content-section"><h2>THE COUNCIL</h2><div class="grid" id="staff-list"></div></div>
+    <div id="members" class="content-section"><h2>CITIZENS</h2><div class="grid" id="member-list"></div></div>
+    <div id="gallery" class="content-section"><h2>VAULT</h2><div class="grid" id="gallery-list"></div></div>
+
+    <script>
+        // PAGE NAVIGATION
+        function showPage(id) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            if(document.getElementById(id+'-nav')) document.getElementById(id+'-nav').classList.add('active');
+        }
+
+        // APP INSTALL LOGIC
+        function installApp() {
+            alert("To Install: \n1. Click your browser menu (3 dots or share icon)\n2. Select 'Add to Home Screen'\n3. Open Masked SMP from your home screen like a real app!");
+        }
+
+        // ADMIN LOGIC
+        let isAdmin = sessionStorage.getItem('msmp_admin');
+        function checkAdminGate() { if(isAdmin) showPage('admin-panel'); else showPage('login-page'); }
+        function tryLogin() {
+            const u = document.getElementById('user-in').value.toLowerCase();
+            const p = document.getElementById('pass-in').value;
+            if((u === "royalalien" && p === "Royal13!") || (u === "v0rt6x" && p === "V0R13!!")) {
+                sessionStorage.setItem('msmp_admin', u); location.reload();
+            } else { document.getElementById('login-err').innerText = "Wrong!"; }
+        }
+        function logout() { sessionStorage.removeItem('msmp_admin'); location.reload(); }
+
+        // DATA LOGIC
+        function savePlayer() {
+            const name = document.getElementById('p-name').value;
+            const role = document.getElementById('p-role').value;
+            const type = document.getElementById('p-type').value;
+            let list = JSON.parse(localStorage.getItem('msmp_players') || "[]");
+            list.push({name, role, type});
+            localStorage.setItem('msmp_players', JSON.stringify(list));
+            location.reload();
+        }
+
+        function refreshData() {
+            const players = JSON.parse(localStorage.getItem('msmp_players') || "[]");
+            document.getElementById('total-count').innerText = players.length;
+            players.forEach(p => {
+                const div = document.createElement('div'); div.className='card';
+                div.innerHTML = `<img src="https://mc-heads.net/body/${p.name}/right"><h3>${p.name}</h3><div class="role-badge">${p.role}</div>`;
+                document.getElementById(p.type === 'staff' ? 'staff-list' : 'member-list').appendChild(div);
+            });
+        }
+
+        // EVENT LOGIC
+        function setEvent() {
+            const title = document.getElementById('ev-name-in').value;
+            const h = document.getElementById('ev-h').value;
+            const end = Date.now() + (h * 3600000);
+            localStorage.setItem('msmp_ev', JSON.stringify({title, end}));
+            location.reload();
+        }
+
+        function checkEvents() {
+            const ev = JSON.parse(localStorage.getItem('msmp_ev'));
+            if(!ev) return;
+            document.getElementById('event-display').style.display = 'block';
+            document.getElementById('ev-title').innerText = ev.title;
+            setInterval(() => {
+                const diff = ev.end - Date.now();
+                if(diff <= 0) return;
+                document.getElementById('h-val').innerText = Math.floor(diff/3600000).toString().padStart(2,'0');
+                document.getElementById('m-val').innerText = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+                document.getElementById('s-val').innerText = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+            }, 1000);
+        }
+
+        window.onload = () => { refreshData(); checkEvents(); };
+    </script>
+</body>
+</html>
