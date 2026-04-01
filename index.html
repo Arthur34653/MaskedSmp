@@ -47,7 +47,7 @@
         .card { background: var(--glass); border: 1px solid var(--glass-border); padding: 40px 20px; border-radius: 25px; text-align: center; position: relative; backdrop-filter: blur(5px); transition: 0.4s; }
         .card img { width: 110px; margin-bottom: 15px; }
 
-        .role-badge { padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); color: var(--accent-green); }
+        .role-badge { padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); color: var(--current-theme); }
 
         /* TIMER GUI */
         #event-display { display: none; margin: 30px auto; text-align: center; max-width: 500px; transition: opacity 1s ease; padding: 20px; border-radius: 30px; }
@@ -55,19 +55,18 @@
         .t-val { font-family: 'Orbitron'; font-size: 2.5rem; color: #fff; }
         .t-lbl { font-size: 0.6rem; letter-spacing: 2px; color: var(--accent-green); display: block; }
 
-        /* FLASHING ANIMATIONS */
         @keyframes flashGreen { 0%, 100% { border-color: #39ff14; box-shadow: 0 0 30px #39ff14; background: rgba(57, 255, 20, 0.1); } 50% { border-color: #fff; box-shadow: 0 0 60px #39ff14; background: rgba(57, 255, 20, 0.3); } }
         @keyframes flashPurple { 0%, 100% { border-color: #a855f7; box-shadow: 0 0 30px #a855f7; background: rgba(168, 85, 247, 0.1); } 50% { border-color: #fff; box-shadow: 0 0 60px #a855f7; background: rgba(168, 85, 247, 0.3); } }
-        
         .flash-alien { animation: flashGreen 0.4s infinite !important; border: 4px solid #39ff14 !important; }
         .flash-vortex { animation: flashPurple 0.4s infinite !important; border: 4px solid #a855f7 !important; }
 
         .admin-box { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 25px; border-radius: 20px; margin-bottom: 20px; }
         .admin-box h3 { font-family: 'Orbitron'; font-size: 0.7rem; color: var(--accent-green); margin-bottom: 15px; }
-        input { background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 10px; margin-bottom: 10px; width: 100%; }
+        input { background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 10px; margin-bottom: 10px; width: 100%; font-family: 'Inter'; }
         .admin-btn { background: var(--accent-green); color: #000; border: none; padding: 12px; border-radius: 10px; font-weight: 900; cursor: pointer; width: 100%; text-transform: uppercase; }
-        .remove-btn { position: absolute; top: 15px; right: 15px; background: rgba(255,0,0,0.2); color: #ff4444; border: 1px solid #ff4444; padding: 4px 10px; border-radius: 8px; cursor: pointer; display: none; }
+        .remove-btn { position: absolute; top: 15px; right: 15px; background: rgba(255,0,0,0.2); color: #ff4444; border: 1px solid #ff4444; padding: 4px 10px; border-radius: 8px; cursor: pointer; display: none; font-size: 0.6rem; font-weight: 900; }
 
+        h2 { font-family: 'Orbitron'; text-align: center; margin-bottom: 40px; letter-spacing: 5px; color: #444; }
         footer { text-align: center; padding: 40px; color: #222; font-size: 0.6rem; letter-spacing: 3px; }
     </style>
 </head>
@@ -83,7 +82,6 @@
 
     <div id="home" class="content-section active" style="text-align: center;">
         <h1 style="font-family:'Orbitron'; font-size: 4rem; color:var(--accent-green);">MASKED SMP</h1>
-        
         <div id="event-display">
             <h2 id="display-event-title" style="font-size:0.8rem; color:var(--accent-green); margin-bottom:15px; letter-spacing:3px;">INCOMING EVENT</h2>
             <div class="timer-box" id="main-timer-box">
@@ -97,13 +95,7 @@
 
     <div id="staff" class="content-section">
         <h2>THE COUNCIL</h2>
-        <div class="grid" id="staff-list">
-            <div class="card">
-                <img src="https://mc-heads.net/body/V0RT6X/right">
-                <h3 style="font-family:'Orbitron';">V0RT6X</h3>
-                <div class="role-badge" style="color:var(--vortex-purple); border-color:var(--vortex-purple);">ADMIN & DEV OF WEBSITE</div>
-            </div>
-        </div>
+        <div class="grid" id="staff-list"></div>
     </div>
 
     <div id="members" class="content-section">
@@ -121,6 +113,18 @@
         <p id="admin-welcome" style="text-align:center; color:var(--accent-green); margin-bottom:20px; font-weight:800;"></p>
         <div class="grid">
             <div class="admin-box">
+                <h3>ADD COUNCIL MEMBER</h3>
+                <input type="text" id="st-name" placeholder="Staff Username">
+                <input type="text" id="st-role" placeholder="Custom Role (e.g. Head Moderator)">
+                <button class="admin-btn" onclick="savePerson('staff')">Verify Council</button>
+            </div>
+            <div class="admin-box">
+                <h3>ADD CITIZEN</h3>
+                <input type="text" id="mb-name" placeholder="Member Username">
+                <input type="text" id="mb-role" placeholder="Custom Role (e.g. Bounty Hunter)">
+                <button class="admin-btn" onclick="savePerson('member')">Grant Citizenship</button>
+            </div>
+            <div class="admin-box">
                 <h3>MANAGE EVENT</h3>
                 <input type="text" id="ev-name" placeholder="Event Label">
                 <div style="display: flex; gap: 5px;">
@@ -130,9 +134,11 @@
                 </div>
                 <button class="admin-btn" onclick="saveEvent()" style="margin-top:10px;">Broadcast Event</button>
             </div>
-            <div class="admin-box"><h3>ADD STAFF</h3><input type="text" id="st-name" placeholder="User"><button class="admin-btn" onclick="savePerson('staff')">Add</button></div>
-            <div class="admin-box"><h3>ADD MEMBER</h3><input type="text" id="mb-name" placeholder="User"><button class="admin-btn" onclick="savePerson('member')">Add</button></div>
-            <div class="admin-box"><h3>VAULT</h3><input type="file" id="gal-file"><button class="admin-btn" onclick="saveImage()">Upload</button></div>
+            <div class="admin-box">
+                <h3>VAULT UPLOAD</h3>
+                <input type="file" id="gal-file" accept="image/*">
+                <button class="admin-btn" onclick="saveImage()">Secure Upload</button>
+            </div>
         </div>
         <button class="admin-btn" style="background:#ff4444; margin-top:20px;" onclick="clearDatabase()">WIPE ALL SAVED DATA</button>
     </div>
@@ -165,13 +171,42 @@
             showTab('admin', 'green');
         }
 
+        function savePerson(type) {
+            const nameId = type === 'staff' ? 'st-name' : 'mb-name';
+            const roleId = type === 'staff' ? 'st-role' : 'mb-role';
+            const name = document.getElementById(nameId).value;
+            const role = document.getElementById(roleId).value || (type === 'staff' ? 'Staff' : 'Member');
+            
+            if(!name) return;
+
+            const person = { name, role, type };
+            let people = JSON.parse(localStorage.getItem('masked_people') || "[]");
+            people.push(person);
+            localStorage.setItem('masked_people', JSON.stringify(people));
+            
+            renderPerson(person, people.length - 1);
+            document.getElementById(nameId).value = '';
+            document.getElementById(roleId).value = '';
+        }
+
+        function renderPerson(p, index) {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `
+                <button class="remove-btn" style="display:${currentUser?'block':'none'}" onclick="removeItem('people', ${index})">X</button>
+                <img src="https://mc-heads.net/body/${p.name}/right">
+                <h3 style="font-family:'Orbitron'">${p.name}</h3>
+                <div class="role-badge">${p.role}</div>
+            `;
+            document.getElementById(p.type === 'staff' ? 'staff-list' : 'member-list').appendChild(div);
+        }
+
         function saveEvent() {
             const title = document.getElementById('ev-name').value || "EVENT";
             const h = parseInt(document.getElementById('ev-h').value) || 0;
             const m = parseInt(document.getElementById('ev-m').value) || 0;
             const s = parseInt(document.getElementById('ev-s').value) || 0;
             const endTime = Date.now() + (h * 3600000) + (m * 60000) + (s * 1000);
-            
             localStorage.setItem('masked_event', JSON.stringify({ title, endTime, host: currentUser }));
             checkActiveEvent();
             showTab('home', 'green');
@@ -180,37 +215,25 @@
         function checkActiveEvent() {
             const data = JSON.parse(localStorage.getItem('masked_event'));
             if(!data) return;
-
             clearInterval(eventInterval);
             const display = document.getElementById('event-display');
             display.style.display = 'block';
             display.style.opacity = '1';
-            display.className = ""; // Reset flash classes
-            
             document.getElementById('display-event-title').innerText = data.title;
             document.getElementById('host-tag').innerText = "HOSTED BY: " + data.host;
-
             eventInterval = setInterval(() => {
                 const diff = data.endTime - Date.now();
-                
                 if(diff <= 0) {
                     clearInterval(eventInterval);
                     display.innerHTML = `<h2 style="font-family:Orbitron; font-size:2.5rem; margin-top:20px;">EVENT LIVE</h2><p style="letter-spacing:4px; font-weight:900; margin-top:10px;">HOSTED BY ${data.host}</p>`;
-                    
                     if(data.host === "RoyalAlien") display.classList.add('flash-alien');
                     else if(data.host === "V0RT6X") display.classList.add('flash-vortex');
-
                     setTimeout(() => {
                         display.style.opacity = '0';
-                        setTimeout(() => {
-                            display.style.display = 'none';
-                            localStorage.removeItem('masked_event');
-                            location.reload(); // Hard reset to bring back timer structure for next use
-                        }, 1000);
+                        setTimeout(() => { display.style.display = 'none'; localStorage.removeItem('masked_event'); location.reload(); }, 1000);
                     }, 10000);
                     return;
                 }
-
                 document.getElementById('h-val').innerText = Math.floor(diff/3600000).toString().padStart(2,'0');
                 document.getElementById('m-val').innerText = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
                 document.getElementById('s-val').innerText = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
@@ -222,22 +245,6 @@
             people.forEach((p, i) => renderPerson(p, i));
             const images = JSON.parse(localStorage.getItem('masked_images') || "[]");
             images.forEach((img, i) => renderImage(img, i));
-        }
-
-        function savePerson(type) {
-            const name = document.getElementById(type === 'staff' ? 'st-name' : 'mb-name').value;
-            if(!name) return;
-            const person = { name, role: type === 'staff' ? 'Staff' : 'Member', type };
-            let people = JSON.parse(localStorage.getItem('masked_people') || "[]");
-            people.push(person);
-            localStorage.setItem('masked_people', JSON.stringify(people));
-            renderPerson(person, people.length - 1);
-        }
-
-        function renderPerson(p, index) {
-            const div = document.createElement('div'); div.className = 'card';
-            div.innerHTML = `<button class="remove-btn" style="display:${currentUser?'block':'none'}" onclick="removeItem('people', ${index})">X</button><img src="https://mc-heads.net/body/${p.name}/right"><h3 style="font-family:'Orbitron'">${p.name}</h3><div class="role-badge">${p.role}</div>`;
-            document.getElementById(p.type === 'staff' ? 'staff-list' : 'member-list').appendChild(div);
         }
 
         function saveImage() {
