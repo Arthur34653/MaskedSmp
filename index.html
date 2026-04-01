@@ -5,273 +5,184 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masked SMP | Home</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#39ff14">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2285%22 font-family=%22Arial Black, sans-serif%22 fill=%22%2339ff14%22>M</text></svg>">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Orbitron:wght@700;900&display=swap');
-
-        :root {
-            --accent-green: #39ff14;
-            --vortex-purple: #a855f7;
-            --bg-dark: #060606;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --current-theme: var(--accent-green);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        
-        body { 
-            color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden;
-            background-color: var(--bg-dark);
-            background-image: 
-                linear-gradient(rgba(6, 6, 6, 0.96), rgba(6, 6, 6, 0.96)), 
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="80"><text x="0" y="50" font-family="Verdana" font-size="12" fill="%23222" opacity="0.3">MASKED SMP // OFFICIAL // CORE NEXUS</text></svg>');
-            background-repeat: repeat;
-        }
-
-        nav {
-            position: fixed; width: 95%; top: 20px; left: 50%; transform: translateX(-50%);
-            z-index: 1000; backdrop-filter: blur(15px); background: rgba(10, 10, 10, 0.7);
-            border: 1px solid var(--glass-border); padding: 1rem 2rem;
-            display: flex; justify-content: center; gap: 30px; border-radius: 100px;
-        }
-        nav a { color: #888; text-decoration: none; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
-        nav a.active { color: var(--current-theme); text-shadow: 0 0 15px var(--current-theme); }
-
-        .content-section { display: none; padding: 160px 20px 80px; max-width: 1200px; margin: 0 auto; animation: slideUp 0.6s ease; }
+        :root { --accent-green: #39ff14; --bg-dark: #060606; --glass: rgba(255, 255, 255, 0.03); --glass-border: rgba(255, 255, 255, 0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-dark); color: white; overflow-x: hidden; min-height: 100vh; }
+        nav { position: fixed; width: 90%; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; backdrop-filter: blur(15px); background: rgba(10, 10, 10, 0.7); border: 1px solid var(--glass-border); padding: 1rem; display: flex; justify-content: center; gap: 25px; border-radius: 100px; }
+        nav a { color: #888; text-decoration: none; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
+        nav a.active { color: var(--accent-green); text-shadow: 0 0 10px var(--accent-green); }
+        .content-section { display: none; padding: 140px 20px; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.4s ease; }
         .content-section.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
-        .card { background: var(--glass); border: 1px solid var(--glass-border); padding: 40px 20px; border-radius: 25px; text-align: center; position: relative; backdrop-filter: blur(5px); transition: 0.4s; }
-        .card img { width: 110px; margin-bottom: 15px; }
-
-        .role-badge { padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); color: var(--current-theme); }
-
-        /* TIMER GUI */
-        #event-display { display: none; margin: 30px auto; text-align: center; max-width: 500px; transition: opacity 1s ease; padding: 20px; border-radius: 30px; }
-        .timer-box { display: inline-flex; gap: 20px; background: rgba(0,0,0,0.5); padding: 20px 40px; border-radius: 20px; border: 1px solid var(--accent-green); position: relative; }
-        .t-val { font-family: 'Orbitron'; font-size: 2.5rem; color: #fff; }
-        .t-lbl { font-size: 0.6rem; letter-spacing: 2px; color: var(--accent-green); display: block; }
-
-        @keyframes flashGreen { 0%, 100% { border-color: #39ff14; box-shadow: 0 0 30px #39ff14; background: rgba(57, 255, 20, 0.1); } 50% { border-color: #fff; box-shadow: 0 0 60px #39ff14; background: rgba(57, 255, 20, 0.3); } }
-        @keyframes flashPurple { 0%, 100% { border-color: #a855f7; box-shadow: 0 0 30px #a855f7; background: rgba(168, 85, 247, 0.1); } 50% { border-color: #fff; box-shadow: 0 0 60px #a855f7; background: rgba(168, 85, 247, 0.3); } }
-        .flash-alien { animation: flashGreen 0.4s infinite !important; border: 4px solid #39ff14 !important; }
-        .flash-vortex { animation: flashPurple 0.4s infinite !important; border: 4px solid #a855f7 !important; }
-
-        .admin-box { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 25px; border-radius: 20px; margin-bottom: 20px; }
-        .admin-box h3 { font-family: 'Orbitron'; font-size: 0.7rem; color: var(--accent-green); margin-bottom: 15px; }
-        input { background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 10px; margin-bottom: 10px; width: 100%; font-family: 'Inter'; }
-        .admin-btn { background: var(--accent-green); color: #000; border: none; padding: 12px; border-radius: 10px; font-weight: 900; cursor: pointer; width: 100%; text-transform: uppercase; }
-        .remove-btn { position: absolute; top: 15px; right: 15px; background: rgba(255,0,0,0.2); color: #ff4444; border: 1px solid #ff4444; padding: 4px 10px; border-radius: 8px; cursor: pointer; display: none; font-size: 0.6rem; font-weight: 900; }
-
-        h2 { font-family: 'Orbitron'; text-align: center; margin-bottom: 40px; letter-spacing: 5px; color: #444; }
-        footer { text-align: center; padding: 40px; color: #222; font-size: 0.6rem; letter-spacing: 3px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
+        .card { background: var(--glass); border: 1px solid var(--glass-border); padding: 30px; border-radius: 25px; text-align: center; transition: 0.3s; }
+        .role-badge { padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 900; border: 1px solid rgba(255,255,255,0.1); color: var(--accent-green); display: inline-block; margin-top: 10px; }
+        .app-download-btn { display: inline-flex; align-items: center; gap: 12px; margin-top: 40px; padding: 18px 35px; background: #fff; color: #000; font-weight: 900; text-decoration: none; border-radius: 50px; font-family: 'Orbitron'; font-size: 0.85rem; transition: 0.3s; cursor: pointer; border:none; }
+        .app-download-btn:hover { transform: translateY(-5px); background: var(--accent-green); box-shadow: 0 0 40px var(--accent-green); }
+        .timer-ui { display: inline-flex; gap: 15px; background: #000; padding: 20px; border-radius: 20px; border: 1px solid var(--accent-green); margin-top: 20px; }
+        .t-val { font-family: 'Orbitron'; font-size: 2rem; color: #fff; }
+        h1, h2, h3 { font-family: 'Orbitron'; text-align: center; }
+        .admin-box { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 20px; border: 1px solid #222; margin-bottom: 20px; }
+        .login-input { width: 100%; padding: 12px; margin-bottom: 10px; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; outline: none; }
+        .admin-btn { width: 100%; padding: 12px; background: var(--accent-green); color: #000; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <nav>
-        <a onclick="showTab('home', 'green')" id="home-btn" class="active">Home</a>
-        <a onclick="handleAdminClick()" id="admin-btn">Control</a>
-        <a onclick="showTab('staff', 'green')" id="staff-btn">Council</a>
-        <a onclick="showTab('members', 'green')" id="members-btn">Members</a>
-        <a onclick="showTab('gallery', 'green')" id="gallery-btn">Vault</a>
+        <a onclick="showPage('home')" id="home-nav" class="active">Home</a>
+        <a onclick="checkAdminGate()" id="control-nav">Control</a>
+        <a onclick="showPage('staff')">Council</a>
+        <a onclick="showPage('members')">Members</a>
+        <a onclick="showPage('gallery')">Vault</a>
     </nav>
 
-    <div id="home" class="content-section active" style="text-align: center;">
-        <h1 style="font-family:'Orbitron'; font-size: 4rem; color:var(--accent-green);">MASKED SMP</h1>
-        <div id="event-display">
-            <h2 id="display-event-title" style="font-size:0.8rem; color:var(--accent-green); margin-bottom:15px; letter-spacing:3px;">INCOMING EVENT</h2>
-            <div class="timer-box" id="main-timer-box">
-                <div><span class="t-val" id="h-val">00</span><span class="t-lbl">HOURS</span></div>
-                <div><span class="t-val" id="m-val">00</span><span class="t-lbl">MINS</span></div>
-                <div><span class="t-val" id="s-val">00</span><span class="t-lbl">SECS</span></div>
+    <div id="home" class="content-section active" style="text-align:center;">
+        <h1 style="font-size: 4rem; color: var(--accent-green);">MASKED SMP</h1>
+        
+        <div id="event-display" style="display:none; margin: 30px 0;">
+            <h2 id="ev-title" style="font-size:0.8rem; color:var(--accent-green); margin-bottom:10px;"></h2>
+            <div class="timer-ui">
+                <div style="text-align:center;"><span class="t-val" id="h-val">00</span></div>
+                <div style="text-align:center;"><span class="t-val" id="m-val">00</span></div>
+                <div style="text-align:center;"><span class="t-val" id="s-val">00</span></div>
             </div>
-            <div id="host-tag" style="font-size: 0.6rem; color: #555; margin-top:15px; letter-spacing:2px; font-weight: 800;"></div>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <p style="color: #444; letter-spacing: 5px; font-weight: 800;">TOTAL PLAYERS</p>
+            <h2 id="total-count" style="font-size: 4rem;">0</h2>
+        </div>
+
+        <div style="margin-top: 50px;">
+            <button onclick="installApp()" class="app-download-btn" id="installBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                INSTALL AS APP
+            </button>
+            <p style="margin-top: 15px; font-size: 0.6rem; color: #555;">Works on Android & iOS Chrome/Safari</p>
         </div>
     </div>
 
-    <div id="staff" class="content-section">
-        <h2>THE COUNCIL</h2>
-        <div class="grid" id="staff-list"></div>
+    <div id="login-page" class="content-section">
+        <div style="max-width:400px; margin:auto; background:var(--glass); padding:40px; border-radius:30px; border:1px solid var(--glass-border); text-align:center;">
+            <h2>ADMIN LOGIN</h2>
+            <input type="text" id="user-in" class="login-input" placeholder="Username">
+            <input type="password" id="pass-in" class="login-input" placeholder="Password">
+            <button class="admin-btn" onclick="tryLogin()">Login</button>
+            <p id="login-err" style="color:#ff4444; margin-top:10px; font-size:0.7rem;"></p>
+        </div>
     </div>
 
-    <div id="members" class="content-section">
-        <h2>CITIZENS</h2>
-        <div class="grid" id="member-list"></div>
-    </div>
-
-    <div id="gallery" class="content-section">
-        <h2>THE VAULT</h2>
-        <div class="grid" id="gallery-list"></div>
-    </div>
-
-    <div id="admin" class="content-section">
-        <h2 style="color:#fff;">SYSTEM OVERRIDE</h2>
-        <p id="admin-welcome" style="text-align:center; color:var(--accent-green); margin-bottom:20px; font-weight:800;"></p>
+    <div id="admin-panel" class="content-section">
+        <div style="display:flex; justify-content:space-between; margin-bottom:30px;">
+            <h2 id="who-is">DASHBOARD</h2>
+            <button onclick="logout()" style="color:#ff4444; background:none; border:1px solid #ff4444; padding:5px 15px; border-radius:10px; cursor:pointer;">Logout</button>
+        </div>
         <div class="grid">
             <div class="admin-box">
-                <h3>ADD COUNCIL MEMBER</h3>
-                <input type="text" id="st-name" placeholder="Staff Username">
-                <input type="text" id="st-role" placeholder="Custom Role (e.g. Head Moderator)">
-                <button class="admin-btn" onclick="savePerson('staff')">Verify Council</button>
+                <h3>PLAYER MANAGEMENT</h3>
+                <div id="admin-manage-list"></div>
             </div>
             <div class="admin-box">
-                <h3>ADD CITIZEN</h3>
-                <input type="text" id="mb-name" placeholder="Member Username">
-                <input type="text" id="mb-role" placeholder="Custom Role (e.g. Bounty Hunter)">
-                <button class="admin-btn" onclick="savePerson('member')">Grant Citizenship</button>
+                <h3>ADD PLAYER</h3>
+                <input type="text" id="p-name" class="login-input" placeholder="MC Name">
+                <input type="text" id="p-role" class="login-input" placeholder="Role">
+                <select id="p-type" class="login-input"><option value="staff">Council</option><option value="member">Citizen</option></select>
+                <button class="admin-btn" onclick="savePlayer()">Add</button>
             </div>
             <div class="admin-box">
-                <h3>MANAGE EVENT</h3>
-                <input type="text" id="ev-name" placeholder="Event Label">
-                <div style="display: flex; gap: 5px;">
-                    <input type="number" id="ev-h" placeholder="HH" style="width:33%">
-                    <input type="number" id="ev-m" placeholder="MM" style="width:33%">
-                    <input type="number" id="ev-s" placeholder="SS" style="width:33%">
-                </div>
-                <button class="admin-btn" onclick="saveEvent()" style="margin-top:10px;">Broadcast Event</button>
-            </div>
-            <div class="admin-box">
-                <h3>VAULT UPLOAD</h3>
-                <input type="file" id="gal-file" accept="image/*">
-                <button class="admin-btn" onclick="saveImage()">Secure Upload</button>
+                <h3>EVENT TIMER</h3>
+                <input type="text" id="ev-name-in" class="login-input" placeholder="Event Name">
+                <input type="number" id="ev-h" class="login-input" placeholder="Hours">
+                <button class="admin-btn" onclick="setEvent()">Start</button>
             </div>
         </div>
-        <button class="admin-btn" style="background:#ff4444; margin-top:20px;" onclick="clearDatabase()">WIPE ALL SAVED DATA</button>
     </div>
 
-    <footer>POWERED BY V0RT6X</footer>
+    <div id="staff" class="content-section"><h2>THE COUNCIL</h2><div class="grid" id="staff-list"></div></div>
+    <div id="members" class="content-section"><h2>CITIZENS</h2><div class="grid" id="member-list"></div></div>
+    <div id="gallery" class="content-section"><h2>VAULT</h2><div class="grid" id="gallery-list"></div></div>
 
     <script>
-        let currentUser = null;
-        let eventInterval;
-
-        window.onload = () => { loadAllData(); checkActiveEvent(); };
-
-        function showTab(t, color) {
+        // PAGE NAVIGATION
+        function showPage(id) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(t).classList.add('active');
+            document.getElementById(id).classList.add('active');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            document.getElementById(t + '-btn').classList.add('active');
-            document.querySelector(':root').style.setProperty('--current-theme', color === 'purple' ? 'var(--vortex-purple)' : 'var(--accent-green)');
+            if(document.getElementById(id+'-nav')) document.getElementById(id+'-nav').classList.add('active');
         }
 
-        function handleAdminClick() {
-            if(currentUser) return showTab('admin', 'green');
-            const user = prompt("Admin User:");
-            const pass = prompt("Admin Password:");
-            if(user === "RoyalAlien" && pass === "Royal13!") { currentUser = "RoyalAlien"; } 
-            else if (user === "V0RT6X" && pass === "V0R13!!") { currentUser = "V0RT6X"; } 
-            else { alert("ACCESS DENIED"); return; }
-            document.getElementById('admin-welcome').innerText = "LOGGED IN AS: " + currentUser;
-            document.querySelectorAll('.remove-btn').forEach(b => b.style.display = 'block');
-            showTab('admin', 'green');
+        // APP INSTALL LOGIC
+        function installApp() {
+            alert("To Install: \n1. Click your browser menu (3 dots or share icon)\n2. Select 'Add to Home Screen'\n3. Open Masked SMP from your home screen like a real app!");
         }
 
-        function savePerson(type) {
-            const nameId = type === 'staff' ? 'st-name' : 'mb-name';
-            const roleId = type === 'staff' ? 'st-role' : 'mb-role';
-            const name = document.getElementById(nameId).value;
-            const role = document.getElementById(roleId).value || (type === 'staff' ? 'Staff' : 'Member');
-            
-            if(!name) return;
+        // ADMIN LOGIC
+        let isAdmin = sessionStorage.getItem('msmp_admin');
+        function checkAdminGate() { if(isAdmin) showPage('admin-panel'); else showPage('login-page'); }
+        function tryLogin() {
+            const u = document.getElementById('user-in').value.toLowerCase();
+            const p = document.getElementById('pass-in').value;
+            if((u === "royalalien" && p === "Royal13!") || (u === "v0rt6x" && p === "V0R13!!")) {
+                sessionStorage.setItem('msmp_admin', u); location.reload();
+            } else { document.getElementById('login-err').innerText = "Wrong!"; }
+        }
+        function logout() { sessionStorage.removeItem('msmp_admin'); location.reload(); }
 
-            const person = { name, role, type };
-            let people = JSON.parse(localStorage.getItem('masked_people') || "[]");
-            people.push(person);
-            localStorage.setItem('masked_people', JSON.stringify(people));
-            
-            renderPerson(person, people.length - 1);
-            document.getElementById(nameId).value = '';
-            document.getElementById(roleId).value = '';
+        // DATA LOGIC
+        function savePlayer() {
+            const name = document.getElementById('p-name').value;
+            const role = document.getElementById('p-role').value;
+            const type = document.getElementById('p-type').value;
+            let list = JSON.parse(localStorage.getItem('msmp_players') || "[]");
+            list.push({name, role, type});
+            localStorage.setItem('msmp_players', JSON.stringify(list));
+            location.reload();
         }
 
-        function renderPerson(p, index) {
-            const div = document.createElement('div');
-            div.className = 'card';
-            div.innerHTML = `
-                <button class="remove-btn" style="display:${currentUser?'block':'none'}" onclick="removeItem('people', ${index})">X</button>
-                <img src="https://mc-heads.net/body/${p.name}/right">
-                <h3 style="font-family:'Orbitron'">${p.name}</h3>
-                <div class="role-badge">${p.role}</div>
-            `;
-            document.getElementById(p.type === 'staff' ? 'staff-list' : 'member-list').appendChild(div);
+        function refreshData() {
+            const players = JSON.parse(localStorage.getItem('msmp_players') || "[]");
+            document.getElementById('total-count').innerText = players.length;
+            players.forEach(p => {
+                const div = document.createElement('div'); div.className='card';
+                div.innerHTML = `<img src="https://mc-heads.net/body/${p.name}/right"><h3>${p.name}</h3><div class="role-badge">${p.role}</div>`;
+                document.getElementById(p.type === 'staff' ? 'staff-list' : 'member-list').appendChild(div);
+            });
         }
 
-        function saveEvent() {
-            const title = document.getElementById('ev-name').value || "EVENT";
-            const h = parseInt(document.getElementById('ev-h').value) || 0;
-            const m = parseInt(document.getElementById('ev-m').value) || 0;
-            const s = parseInt(document.getElementById('ev-s').value) || 0;
-            const endTime = Date.now() + (h * 3600000) + (m * 60000) + (s * 1000);
-            localStorage.setItem('masked_event', JSON.stringify({ title, endTime, host: currentUser }));
-            checkActiveEvent();
-            showTab('home', 'green');
+        // EVENT LOGIC
+        function setEvent() {
+            const title = document.getElementById('ev-name-in').value;
+            const h = document.getElementById('ev-h').value;
+            const end = Date.now() + (h * 3600000);
+            localStorage.setItem('msmp_ev', JSON.stringify({title, end}));
+            location.reload();
         }
 
-        function checkActiveEvent() {
-            const data = JSON.parse(localStorage.getItem('masked_event'));
-            if(!data) return;
-            clearInterval(eventInterval);
-            const display = document.getElementById('event-display');
-            display.style.display = 'block';
-            display.style.opacity = '1';
-            document.getElementById('display-event-title').innerText = data.title;
-            document.getElementById('host-tag').innerText = "HOSTED BY: " + data.host;
-            eventInterval = setInterval(() => {
-                const diff = data.endTime - Date.now();
-                if(diff <= 0) {
-                    clearInterval(eventInterval);
-                    display.innerHTML = `<h2 style="font-family:Orbitron; font-size:2.5rem; margin-top:20px;">EVENT LIVE</h2><p style="letter-spacing:4px; font-weight:900; margin-top:10px;">HOSTED BY ${data.host}</p>`;
-                    if(data.host === "RoyalAlien") display.classList.add('flash-alien');
-                    else if(data.host === "V0RT6X") display.classList.add('flash-vortex');
-                    setTimeout(() => {
-                        display.style.opacity = '0';
-                        setTimeout(() => { display.style.display = 'none'; localStorage.removeItem('masked_event'); location.reload(); }, 1000);
-                    }, 10000);
-                    return;
-                }
+        function checkEvents() {
+            const ev = JSON.parse(localStorage.getItem('msmp_ev'));
+            if(!ev) return;
+            document.getElementById('event-display').style.display = 'block';
+            document.getElementById('ev-title').innerText = ev.title;
+            setInterval(() => {
+                const diff = ev.end - Date.now();
+                if(diff <= 0) return;
                 document.getElementById('h-val').innerText = Math.floor(diff/3600000).toString().padStart(2,'0');
                 document.getElementById('m-val').innerText = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
                 document.getElementById('s-val').innerText = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
             }, 1000);
         }
 
-        function loadAllData() {
-            const people = JSON.parse(localStorage.getItem('masked_people') || "[]");
-            people.forEach((p, i) => renderPerson(p, i));
-            const images = JSON.parse(localStorage.getItem('masked_images') || "[]");
-            images.forEach((img, i) => renderImage(img, i));
-        }
-
-        function saveImage() {
-            const file = document.getElementById('gal-file').files[0];
-            if(!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                let imgs = JSON.parse(localStorage.getItem('masked_images') || "[]");
-                imgs.push(e.target.result);
-                localStorage.setItem('masked_images', JSON.stringify(imgs));
-                renderImage(e.target.result, imgs.length - 1);
-            }; reader.readAsDataURL(file);
-        }
-
-        function renderImage(src, index) {
-            const div = document.createElement('div'); div.className = 'card';
-            div.innerHTML = `<button class="remove-btn" style="display:${currentUser?'block':'none'}" onclick="removeItem('images', ${index})">X</button><img src="${src}" style="width:100%; border-radius:15px;">`;
-            document.getElementById('gallery-list').appendChild(div);
-        }
-
-        function removeItem(t, i) {
-            const k = t === 'people' ? 'masked_people' : 'masked_images';
-            let d = JSON.parse(localStorage.getItem(k)); d.splice(i, 1);
-            localStorage.setItem(k, JSON.stringify(d)); location.reload();
-        }
-
-        function clearDatabase() { if(confirm("Wipe all data?")) { localStorage.clear(); location.reload(); } }
+        window.onload = () => { refreshData(); checkEvents(); };
     </script>
 </body>
 </html>
