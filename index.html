@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>Masked SMP | Official</title>
+    <title>Masked SMP | Home</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2285%22 font-family=%22Arial Black, sans-serif%22 fill=%22%2339ff14%22>M</text></svg>">
 
@@ -15,194 +14,257 @@
             --accent-green: #39ff14;
             --vortex-purple: #a855f7;
             --bg-dark: #060606;
-            --card-bg: rgba(255, 255, 255, 0.02);
-            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
             --current-theme: var(--accent-green);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { background-color: var(--bg-dark); color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; line-height: 1.6; }
+        
+        body { 
+            color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden;
+            background-color: var(--bg-dark);
+            background-image: 
+                linear-gradient(rgba(6, 6, 6, 0.96), rgba(6, 6, 6, 0.96)), 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="80"><text x="0" y="50" font-family="Verdana" font-size="12" fill="%23222" opacity="0.3">MASKED SMP // OFFICIAL // CORE NEXUS</text></svg>');
+            background-repeat: repeat;
+        }
 
         nav {
-            position: fixed; width: 100%; top: 0; z-index: 1000;
-            backdrop-filter: blur(20px); background: rgba(6, 6, 6, 0.8);
-            border-bottom: 1px solid var(--border); padding: 1.2rem;
-            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;
+            position: fixed; width: 95%; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 1000; backdrop-filter: blur(15px); background: rgba(10, 10, 10, 0.7);
+            border: 1px solid var(--glass-border); padding: 1rem 2rem;
+            display: flex; justify-content: center; gap: 30px; border-radius: 100px;
         }
-        nav a { color: #666; text-decoration: none; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; cursor: pointer; }
+        nav a { color: #888; text-decoration: none; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
         nav a.active { color: var(--current-theme); text-shadow: 0 0 15px var(--current-theme); }
 
-        .content-section { display: none; padding: 160px 20px 60px; max-width: 1100px; margin: 0 auto; animation: fadeIn 0.8s ease; }
+        .content-section { display: none; padding: 160px 20px 80px; max-width: 1200px; margin: 0 auto; animation: slideUp 0.6s ease; }
         .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .hero { text-align: center; }
-        .hero h1 { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 8vw, 5rem); color: var(--accent-green); text-shadow: 0 0 30px rgba(57, 255, 20, 0.3); margin-top: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
+        .card { background: var(--glass); border: 1px solid var(--glass-border); padding: 40px 20px; border-radius: 25px; text-align: center; position: relative; backdrop-filter: blur(5px); transition: 0.4s; }
+        .card img { width: 110px; margin-bottom: 15px; }
 
-        /* --- PLAYER COUNT STYLES --- */
-        .player-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            color: #aaa;
-        }
-        .online-dot { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 10px var(--accent-green); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        #count-num { color: var(--accent-green); }
+        .role-badge { padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); color: var(--accent-green); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .staff-card { background: var(--card-bg); border: 1px solid var(--border); padding: 40px 20px; border-radius: 20px; text-align: center; transition: 0.4s; }
-        .staff-card img { width: 130px; height: auto; margin-bottom: 20px; }
+        /* TIMER GUI */
+        #event-display { display: none; margin: 30px auto; text-align: center; max-width: 500px; transition: opacity 1s ease; padding: 20px; border-radius: 30px; }
+        .timer-box { display: inline-flex; gap: 20px; background: rgba(0,0,0,0.5); padding: 20px 40px; border-radius: 20px; border: 1px solid var(--accent-green); position: relative; }
+        .t-val { font-family: 'Orbitron'; font-size: 2.5rem; color: #fff; }
+        .t-lbl { font-size: 0.6rem; letter-spacing: 2px; color: var(--accent-green); display: block; }
 
-        /* --- ADMIN & EVENT --- */
-        #event-display { display: none; margin-top: 40px; padding: 30px; border: 1px dashed var(--accent-green); border-radius: 20px; }
-        .timer { display: flex; justify-content: center; gap: 20px; font-family: 'Orbitron'; margin-top: 15px; }
-        .time-unit { font-size: 2.5rem; color: var(--accent-green); }
-        .flashing { animation: eventFlash 0.3s infinite !important; }
-        @keyframes eventFlash { 0%, 100% { border-color: var(--accent-green); } 50% { border-color: var(--vortex-purple); } }
-        .fade-out { opacity: 0; transition: 10s; }
+        /* FLASHING ANIMATIONS */
+        @keyframes flashGreen { 0%, 100% { border-color: #39ff14; box-shadow: 0 0 30px #39ff14; background: rgba(57, 255, 20, 0.1); } 50% { border-color: #fff; box-shadow: 0 0 60px #39ff14; background: rgba(57, 255, 20, 0.3); } }
+        @keyframes flashPurple { 0%, 100% { border-color: #a855f7; box-shadow: 0 0 30px #a855f7; background: rgba(168, 85, 247, 0.1); } 50% { border-color: #fff; box-shadow: 0 0 60px #a855f7; background: rgba(168, 85, 247, 0.3); } }
+        
+        .flash-alien { animation: flashGreen 0.4s infinite !important; border: 4px solid #39ff14 !important; }
+        .flash-vortex { animation: flashPurple 0.4s infinite !important; border: 4px solid #a855f7 !important; }
 
-        footer { text-align: center; padding: 80px 0 40px; color: #222; font-size: 0.7rem; font-weight: 800; letter-spacing: 3px; }
+        .admin-box { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 25px; border-radius: 20px; margin-bottom: 20px; }
+        .admin-box h3 { font-family: 'Orbitron'; font-size: 0.7rem; color: var(--accent-green); margin-bottom: 15px; }
+        input { background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 10px; margin-bottom: 10px; width: 100%; }
+        .admin-btn { background: var(--accent-green); color: #000; border: none; padding: 12px; border-radius: 10px; font-weight: 900; cursor: pointer; width: 100%; text-transform: uppercase; }
+        .remove-btn { position: absolute; top: 15px; right: 15px; background: rgba(255,0,0,0.2); color: #ff4444; border: 1px solid #ff4444; padding: 4px 10px; border-radius: 8px; cursor: pointer; display: none; }
 
+        footer { text-align: center; padding: 40px; color: #222; font-size: 0.6rem; letter-spacing: 3px; }
     </style>
 </head>
 <body>
 
-    <nav id="navbar">
+    <nav>
         <a onclick="showTab('home', 'green')" id="home-btn" class="active">Home</a>
-        <a onclick="handleAdminClick()" id="admin-btn">Admin</a>
-        <a onclick="showTab('vortex', 'purple')" id="vortex-btn">V0RT6X1</a>
-        <a onclick="showTab('alien', 'green')" id="alien-btn">RoyalAlien</a>
-        <a onclick="showTab('staff', 'green')" id="staff-btn">Staff</a>
+        <a onclick="handleAdminClick()" id="admin-btn">Control</a>
+        <a onclick="showTab('staff', 'green')" id="staff-btn">Council</a>
+        <a onclick="showTab('members', 'green')" id="members-btn">Members</a>
+        <a onclick="showTab('gallery', 'green')" id="gallery-btn">Vault</a>
     </nav>
 
-    <div id="home" class="content-section active">
-        <div class="hero">
-            <div class="player-status">
-                <div class="online-dot"></div>
-                <span id="player-count">PLAYERS ONLINE: <span id="count-num">...</span></span>
+    <div id="home" class="content-section active" style="text-align: center;">
+        <h1 style="font-family:'Orbitron'; font-size: 4rem; color:var(--accent-green);">MASKED SMP</h1>
+        
+        <div id="event-display">
+            <h2 id="display-event-title" style="font-size:0.8rem; color:var(--accent-green); margin-bottom:15px; letter-spacing:3px;">INCOMING EVENT</h2>
+            <div class="timer-box" id="main-timer-box">
+                <div><span class="t-val" id="h-val">00</span><span class="t-lbl">HOURS</span></div>
+                <div><span class="t-val" id="m-val">00</span><span class="t-lbl">MINS</span></div>
+                <div><span class="t-val" id="s-val">00</span><span class="t-lbl">SECS</span></div>
             </div>
-            <h1>MASKED SMP</h1>
-            
-            <div id="event-display">
-                <p id="event-title" style="text-transform:uppercase; letter-spacing:3px; font-size:0.8rem; color:var(--accent-green);">EVENT STARTING</p>
-                <div class="timer">
-                    <div><span class="time-unit" id="h-val">00</span><small style="display:block; font-size:0.6rem;">HRS</small></div>
-                    <div><span class="time-unit" id="m-val">00</span><small style="display:block; font-size:0.6rem;">MINS</small></div>
-                    <div><span class="time-unit" id="s-val">00</span><small style="display:block; font-size:0.6rem;">SECS</small></div>
-                </div>
-            </div>
+            <div id="host-tag" style="font-size: 0.6rem; color: #555; margin-top:15px; letter-spacing:2px; font-weight: 800;"></div>
         </div>
     </div>
 
     <div id="staff" class="content-section">
-        <h2 style="text-align:center; margin-bottom:50px; font-family:'Orbitron';">THE COUNCIL</h2>
-        <div class="grid">
-            <div class="staff-card">
-                <img src="https://mc-heads.net/body/V0RT6X/right" alt="V0RT6X">
-                <h3 style="color:var(--vortex-purple); font-family:'Orbitron';">V0RT6X</h3>
-                <div style="font-size:0.7rem; letter-spacing:3px; margin-top:10px;">Admin</div>
-            </div>
-            <div class="staff-card">
-                <img src="https://mc-heads.net/body/Proximally/right" alt="RoyalAlien">
-                <h3 style="color:var(--accent-green); font-family:'Orbitron';">RoyalAlien</h3>
-                <div style="font-size:0.7rem; letter-spacing:3px; margin-top:10px;">Owner</div>
+        <h2>THE COUNCIL</h2>
+        <div class="grid" id="staff-list">
+            <div class="card">
+                <img src="https://mc-heads.net/body/V0RT6X/right">
+                <h3 style="font-family:'Orbitron';">V0RT6X</h3>
+                <div class="role-badge" style="color:var(--vortex-purple); border-color:var(--vortex-purple);">ADMIN & DEV OF WEBSITE</div>
             </div>
         </div>
+    </div>
+
+    <div id="members" class="content-section">
+        <h2>CITIZENS</h2>
+        <div class="grid" id="member-list"></div>
+    </div>
+
+    <div id="gallery" class="content-section">
+        <h2>THE VAULT</h2>
+        <div class="grid" id="gallery-list"></div>
     </div>
 
     <div id="admin" class="content-section">
-        <div style="background: rgba(255,255,255,0.03); padding:40px; border-radius:20px; text-align:center; max-width:500px; margin:0 auto; border: 1px solid #333;">
-            <h2 style="font-family:'Orbitron'; color:var(--accent-green);">ADMIN ACCESS</h2>
-            <input type="text" id="event-name-input" placeholder="Event Name" style="width:100%; padding:12px; margin-top:20px; background:#111; border:1px solid #444; color:white; border-radius:8px;">
-            <div style="display:flex; gap:10px; margin:15px 0;">
-                <input type="number" id="h-input" placeholder="Hrs" style="flex:1; padding:12px; background:#111; border:1px solid #444; color:white; border-radius:8px;">
-                <input type="number" id="m-input" placeholder="Min" style="flex:1; padding:12px; background:#111; border:1px solid #444; color:white; border-radius:8px;">
+        <h2 style="color:#fff;">SYSTEM OVERRIDE</h2>
+        <p id="admin-welcome" style="text-align:center; color:var(--accent-green); margin-bottom:20px; font-weight:800;"></p>
+        <div class="grid">
+            <div class="admin-box">
+                <h3>MANAGE EVENT</h3>
+                <input type="text" id="ev-name" placeholder="Event Label">
+                <div style="display: flex; gap: 5px;">
+                    <input type="number" id="ev-h" placeholder="HH" style="width:33%">
+                    <input type="number" id="ev-m" placeholder="MM" style="width:33%">
+                    <input type="number" id="ev-s" placeholder="SS" style="width:33%">
+                </div>
+                <button class="admin-btn" onclick="saveEvent()" style="margin-top:10px;">Broadcast Event</button>
             </div>
-            <button onclick="startCountdown()" style="width:100%; padding:15px; background:var(--accent-green); color:black; border:none; border-radius:8px; font-weight:900; cursor:pointer;">START EVENT</button>
+            <div class="admin-box"><h3>ADD STAFF</h3><input type="text" id="st-name" placeholder="User"><button class="admin-btn" onclick="savePerson('staff')">Add</button></div>
+            <div class="admin-box"><h3>ADD MEMBER</h3><input type="text" id="mb-name" placeholder="User"><button class="admin-btn" onclick="savePerson('member')">Add</button></div>
+            <div class="admin-box"><h3>VAULT</h3><input type="file" id="gal-file"><button class="admin-btn" onclick="saveImage()">Upload</button></div>
         </div>
+        <button class="admin-btn" style="background:#ff4444; margin-top:20px;" onclick="clearDatabase()">WIPE ALL SAVED DATA</button>
     </div>
 
-    <div id="vortex" class="content-section"><h2>V0RT6X1 ARCHIVE</h2><div class="grid"><iframe src="https://www.youtube.com/embed?listType=user_uploads&list=V0RT6X1" allowfullscreen></iframe></div></div>
-    <div id="alien" class="content-section"><h2>ROYALALIEN ARCHIVE</h2><div class="grid"><iframe src="https://www.youtube.com/embed?listType=user_uploads&list=Proximally" allowfullscreen></iframe></div></div>
-
-    <footer>Masked Smp Powerd by V0RT6X</footer>
+    <footer>POWERED BY V0RT6X</footer>
 
     <script>
-        let countdownInterval;
-        let isAdmin = false;
+        let currentUser = null;
+        let eventInterval;
 
-        function showTab(tabId, theme) {
+        window.onload = () => { loadAllData(); checkActiveEvent(); };
+
+        function showTab(t, color) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            document.getElementById(t).classList.add('active');
             document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            if(document.getElementById(tabId + '-btn')) document.getElementById(tabId + '-btn').classList.add('active');
-            document.querySelector(':root').style.setProperty('--current-theme', theme === 'purple' ? 'var(--vortex-purple)' : 'var(--accent-green)');
+            document.getElementById(t + '-btn').classList.add('active');
+            document.querySelector(':root').style.setProperty('--current-theme', color === 'purple' ? 'var(--vortex-purple)' : 'var(--accent-green)');
         }
-
-        // --- FETCH PLAYER COUNT ---
-        function getPlayerCount() {
-            fetch('https://api.mcsrvstat.us/2/66.51.97.61:25560')
-                .then(res => res.json())
-                .then(data => {
-                    const countElem = document.getElementById('count-num');
-                    if (data.online) {
-                        countElem.innerText = data.players.online;
-                    } else {
-                        countElem.innerText = "OFFLINE";
-                        countElem.style.color = "#ff4444";
-                    }
-                })
-                .catch(() => {
-                    document.getElementById('count-num').innerText = "ERR";
-                });
-        }
-        getPlayerCount();
-        setInterval(getPlayerCount, 30000); // Update every 30 seconds
 
         function handleAdminClick() {
-            if (isAdmin) return showTab('admin', 'green');
-            if (prompt("Email:") === "a_hipkins@outlook.com" && prompt("Pass:") === "Arthurtom13") {
-                isAdmin = true;
-                showTab('admin', 'green');
-            }
+            if(currentUser) return showTab('admin', 'green');
+            const user = prompt("Admin User:");
+            const pass = prompt("Admin Password:");
+            if(user === "RoyalAlien" && pass === "Royal13!") { currentUser = "RoyalAlien"; } 
+            else if (user === "V0RT6X" && pass === "V0R13!!") { currentUser = "V0RT6X"; } 
+            else { alert("ACCESS DENIED"); return; }
+            document.getElementById('admin-welcome').innerText = "LOGGED IN AS: " + currentUser;
+            document.querySelectorAll('.remove-btn').forEach(b => b.style.display = 'block');
+            showTab('admin', 'green');
         }
 
-        function startCountdown() {
-            const name = document.getElementById('event-name-input').value || "EVENT";
-            const h = parseInt(document.getElementById('h-input').value) || 0;
-            const m = parseInt(document.getElementById('m-input').value) || 0;
-            let totalSeconds = (h * 3600) + (m * 60);
-            if (totalSeconds <= 0) return alert("Set time!");
-            document.getElementById('event-title').innerText = name;
+        function saveEvent() {
+            const title = document.getElementById('ev-name').value || "EVENT";
+            const h = parseInt(document.getElementById('ev-h').value) || 0;
+            const m = parseInt(document.getElementById('ev-m').value) || 0;
+            const s = parseInt(document.getElementById('ev-s').value) || 0;
+            const endTime = Date.now() + (h * 3600000) + (m * 60000) + (s * 1000);
+            
+            localStorage.setItem('masked_event', JSON.stringify({ title, endTime, host: currentUser }));
+            checkActiveEvent();
+            showTab('home', 'green');
+        }
+
+        function checkActiveEvent() {
+            const data = JSON.parse(localStorage.getItem('masked_event'));
+            if(!data) return;
+
+            clearInterval(eventInterval);
             const display = document.getElementById('event-display');
             display.style.display = 'block';
-            display.classList.remove('flashing', 'fade-out');
-            showTab('home', 'green');
-            clearInterval(countdownInterval);
-            countdownInterval = setInterval(() => {
-                totalSeconds--;
-                document.getElementById('h-val').innerText = Math.floor(totalSeconds/3600).toString().padStart(2,'0');
-                document.getElementById('m-val').innerText = Math.floor((totalSeconds%3600)/60).toString().padStart(2,'0');
-                document.getElementById('s-val').innerText = (totalSeconds%60).toString().padStart(2,'0');
-                if (totalSeconds <= 0) { clearInterval(countdownInterval); triggerFinish(); }
+            display.style.opacity = '1';
+            display.className = ""; // Reset flash classes
+            
+            document.getElementById('display-event-title').innerText = data.title;
+            document.getElementById('host-tag').innerText = "HOSTED BY: " + data.host;
+
+            eventInterval = setInterval(() => {
+                const diff = data.endTime - Date.now();
+                
+                if(diff <= 0) {
+                    clearInterval(eventInterval);
+                    display.innerHTML = `<h2 style="font-family:Orbitron; font-size:2.5rem; margin-top:20px;">EVENT LIVE</h2><p style="letter-spacing:4px; font-weight:900; margin-top:10px;">HOSTED BY ${data.host}</p>`;
+                    
+                    if(data.host === "RoyalAlien") display.classList.add('flash-alien');
+                    else if(data.host === "V0RT6X") display.classList.add('flash-vortex');
+
+                    setTimeout(() => {
+                        display.style.opacity = '0';
+                        setTimeout(() => {
+                            display.style.display = 'none';
+                            localStorage.removeItem('masked_event');
+                            location.reload(); // Hard reset to bring back timer structure for next use
+                        }, 1000);
+                    }, 10000);
+                    return;
+                }
+
+                document.getElementById('h-val').innerText = Math.floor(diff/3600000).toString().padStart(2,'0');
+                document.getElementById('m-val').innerText = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+                document.getElementById('s-val').innerText = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
             }, 1000);
         }
 
-        function triggerFinish() {
-            const d = document.getElementById('event-display');
-            d.classList.add('flashing');
-            document.getElementById('event-title').innerText = "LIVE NOW";
-            setTimeout(() => { d.classList.add('fade-out'); setTimeout(() => d.style.display='none', 10000); }, 5000);
+        function loadAllData() {
+            const people = JSON.parse(localStorage.getItem('masked_people') || "[]");
+            people.forEach((p, i) => renderPerson(p, i));
+            const images = JSON.parse(localStorage.getItem('masked_images') || "[]");
+            images.forEach((img, i) => renderImage(img, i));
         }
+
+        function savePerson(type) {
+            const name = document.getElementById(type === 'staff' ? 'st-name' : 'mb-name').value;
+            if(!name) return;
+            const person = { name, role: type === 'staff' ? 'Staff' : 'Member', type };
+            let people = JSON.parse(localStorage.getItem('masked_people') || "[]");
+            people.push(person);
+            localStorage.setItem('masked_people', JSON.stringify(people));
+            renderPerson(person, people.length - 1);
+        }
+
+        function renderPerson(p, index) {
+            const div = document.createElement('div'); div.className = 'card';
+            div.innerHTML = `<button class="remove-btn" style="display:${currentUser?'block':'none'}" onclick="removeItem('people', ${index})">X</button><img src="https://mc-heads.net/body/${p.name}/right"><h3 style="font-family:'Orbitron'">${p.name}</h3><div class="role-badge">${p.role}</div>`;
+            document.getElementById(p.type === 'staff' ? 'staff-list' : 'member-list').appendChild(div);
+        }
+
+        function saveImage() {
+            const file = document.getElementById('gal-file').files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                let imgs = JSON.parse(localStorage.getItem('masked_images') || "[]");
+                imgs.push(e.target.result);
+                localStorage.setItem('masked_images', JSON.stringify(imgs));
+                renderImage(e.target.result, imgs.length - 1);
+            }; reader.readAsDataURL(file);
+        }
+
+        function renderImage(src, index) {
+            const div = document.createElement('div'); div.className = 'card';
+            div.innerHTML = `<button class="remove-btn" style="display:${currentUser?'block':'none'}" onclick="removeItem('images', ${index})">X</button><img src="${src}" style="width:100%; border-radius:15px;">`;
+            document.getElementById('gallery-list').appendChild(div);
+        }
+
+        function removeItem(t, i) {
+            const k = t === 'people' ? 'masked_people' : 'masked_images';
+            let d = JSON.parse(localStorage.getItem(k)); d.splice(i, 1);
+            localStorage.setItem(k, JSON.stringify(d)); location.reload();
+        }
+
+        function clearDatabase() { if(confirm("Wipe all data?")) { localStorage.clear(); location.reload(); } }
     </script>
 </body>
 </html>
