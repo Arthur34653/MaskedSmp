@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Dashboard - Auto Auth</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 360px;
+        }
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .email-display {
+            color: #5f6368;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        #status-text {
+            font-size: 0.9rem;
+            color: #1a73e8;
+        }
+        .ip-container {
+            margin-top: 25px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 6px;
+            display: none; /* Hidden until "auth" is done */
+        }
+        .ip-label {
+            color: #888;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .ip-address {
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2rem;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="email-display">
+            <strong>Account:</strong> a_hipkins@outlook.com
+        </div>
+
+        <div id="loading-section">
+            <div class="loader"></div>
+            <span id="status-text">Verifying secure session...</span>
+        </div>
+
+        <div id="ip-container" class="ip-container">
+            <div class="ip-label">Assigned Session IP</div>
+            <div id="fake-ip" class="ip-address">0.0.0.0</div>
+        </div>
+    </div>
+
+    <script>
+        // This function runs automatically when the page is finished loading
+        window.onload = function() {
+            const statusText = document.getElementById('status-text');
+            const loadingSection = document.getElementById('loading-section');
+            const ipContainer = document.getElementById('ip-container');
+            const ipDisplay = document.getElementById('fake-ip');
+
+            // 1. Simulate a delay for "Authenticating"
+            setTimeout(() => {
+                statusText.innerText = "Access Granted.";
+                statusText.style.color = "green";
+                
+                // 2. Generate the random IP address
+                const randomIP = `${r()}.${r()}.${r()}.${r()}`;
+                ipDisplay.innerText = randomIP;
+
+                // 3. Show the IP box
+                setTimeout(() => {
+                    loadingSection.style.display = 'none';
+                    ipContainer.style.display = 'block';
+                }, 500);
+
+            }, 1500); // 1.5 second wait time
+        };
+
+        function r() {
+            return Math.floor(Math.random() * 256);
+        }
+    </script>
+
+</body>
+</html>
